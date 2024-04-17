@@ -1,19 +1,28 @@
 import api from '@/composables/useApiMiddleware'
+import type { SupervisorAccount } from '@/types/SupervisorAccount'
 
-const fetchData = (url: string) => {
-  return async () => {
-    try {
-      const response = await api.get(url)
-      return response.data
-    } catch (error) {
-      console.error('Error fetching data:', error)
-      return Promise.reject(error)
-    }
+const request = async ({
+  method,
+  url,
+  data = null
+}: {
+  method: 'get' | 'post' | 'put' | 'delete'
+  url: string
+  data?: any
+}) => {
+  try {
+    const response = await api[method](url, data)
+    return response.data
+  } catch (error) {
+    console.error('Error making request:', error)
+    return Promise.reject(error)
   }
 }
 
 const useAxios = {
-  getData: fetchData('/data')
+  getData: () => request({ method: 'get', url: '/data' }),
+  registerSupervisor: (data: SupervisorAccount) =>
+    request({ method: 'post', url: '/supervisor', data })
 }
 
 export default useAxios
