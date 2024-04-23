@@ -6,6 +6,8 @@ export const MENU_ITEMS = [
   { title: 'Question Bank', icon: 'mdi-help-box', value: 'question-bank' }
 ]
 
+export const MEMBERS_MENU_ITEMS = [{ title: 'Add Member' }]
+
 export const TABLE_COLUMNS = [
   { title: 'Name', key: 'name', align: 'start', sortable: false },
   { title: 'Team', key: 'team' },

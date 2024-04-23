@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { MENU_ITEMS } from '@/constants'
 
 const drawer = ref(true)
-const rail = ref(true)
+const rail = ref(false)
 const menuItems = ref(MENU_ITEMS)
 </script>
 
@@ -45,9 +45,7 @@ const menuItems = ref(MENU_ITEMS)
           hide-details
           single-line
         ></v-text-field>
-        <v-btn icon>
-          <v-icon>mdi-dots-vertical</v-icon>
-        </v-btn>
+        <slot name="menu"></slot>
       </v-app-bar>
       <slot></slot>
     </v-main>

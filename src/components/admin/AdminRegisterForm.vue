@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { useSupervisorStore } from '@/stores/supervisor'
-import { useRegisterSupervisor } from '@/composables/useRegister'
+import { useRegister } from '@/composables/useRegister'
 import { useValidationRules } from '@/composables/useValidationRules'
 
 const supervisorStore = useSupervisorStore()
-const { register } = useRegisterSupervisor()
+const { register } = useRegister()
 const { createRules } = useValidationRules()
 
 const account = supervisorStore.account
