@@ -1,9 +1,29 @@
 export const MENU_ITEMS = [
-  { title: 'Members', icon: 'mdi-account-group-outline', value: 'members' },
-  { title: 'Pages', icon: 'mdi-file-document', value: 'pages' },
-  { title: 'Learning session', icon: 'mdi-school', value: 'learning-session' },
-  { title: 'Synergy Project', icon: 'mdi-lightbulb-group', value: 'synergy-project' },
-  { title: 'Question Bank', icon: 'mdi-help-box', value: 'question-bank' }
+  {
+    title: 'Members',
+    icon: 'mdi-account-group-outline',
+    value: 'members',
+    route: '/supervisor/dashboard'
+  },
+  { title: 'Pages', icon: 'mdi-file-document', value: 'pages', route: '/' },
+  {
+    title: 'Learning session',
+    icon: 'mdi-school',
+    value: 'learning-session',
+    route: '/'
+  },
+  {
+    title: 'Synergy Project',
+    icon: 'mdi-lightbulb-group',
+    value: 'synergy-project',
+    route: '/'
+  },
+  {
+    title: 'Question Bank',
+    icon: 'mdi-help-box',
+    value: 'question-bank',
+    route: '/'
+  }
 ]
 
 export const MEMBERS_MENU_ITEMS = [{ title: 'Add Member' }]
@@ -20,6 +40,7 @@ export const TABLE_COLUMNS = [
 
 export const TABLE_DATA = [
   {
+    id: Math.floor(Math.random() * 10000),
     name: 'John Doe',
     team: 'Marketing',
     status: 'Active',
@@ -28,6 +49,7 @@ export const TABLE_DATA = [
     profileUpdated: true
   },
   {
+    id: Math.floor(Math.random() * 10000),
     name: 'Jane Smith',
     team: 'Sales',
     status: 'Inactive',
@@ -36,6 +58,7 @@ export const TABLE_DATA = [
     profileUpdated: false
   },
   {
+    id: Math.floor(Math.random() * 10000),
     name: 'Alice Johnson',
     team: 'Development',
     status: 'Active',
@@ -44,55 +67,8 @@ export const TABLE_DATA = [
     profileUpdated: true
   },
   {
+    id: Math.floor(Math.random() * 10000),
     name: 'Bob Williams',
-    team: 'Marketing',
-    status: 'Inactive',
-    profilePicture: false,
-    rivs: true,
-    profileUpdated: false
-  },
-  {
-    name: 'Charlie Brown',
-    team: 'Sales',
-    status: 'Active',
-    profilePicture: true,
-    rivs: false,
-    profileUpdated: true
-  },
-  {
-    name: 'David Davis',
-    team: 'Development',
-    status: 'Inactive',
-    profilePicture: false,
-    rivs: true,
-    profileUpdated: false
-  },
-  {
-    name: 'Eve Evans',
-    team: 'Marketing',
-    status: 'Active',
-    profilePicture: true,
-    rivs: false,
-    profileUpdated: true
-  },
-  {
-    name: 'Frank Foster',
-    team: 'Sales',
-    status: 'Inactive',
-    profilePicture: false,
-    rivs: true,
-    profileUpdated: false
-  },
-  {
-    name: 'Grace Green',
-    team: 'Development',
-    status: 'Active',
-    profilePicture: true,
-    rivs: false,
-    profileUpdated: true
-  },
-  {
-    name: 'Harry Hall',
     team: 'Marketing',
     status: 'Inactive',
     profilePicture: false,

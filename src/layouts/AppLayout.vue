@@ -4,6 +4,7 @@ import { MENU_ITEMS } from '@/constants'
 
 const drawer = ref(true)
 const rail = ref(false)
+const activeMenu = ref()
 const menuItems = ref(MENU_ITEMS)
 </script>
 
@@ -29,13 +30,15 @@ const menuItems = ref(MENU_ITEMS)
           :prepend-icon="item.icon"
           :title="item.title"
           :value="item.value"
+          :to="item.route"
+          @click="activeMenu = item.title"
         ></v-list-item>
       </v-list>
     </v-navigation-drawer>
 
     <v-main style="height: 250px">
       <v-app-bar app>
-        <v-toolbar-title class="mr-auto">Dashboard</v-toolbar-title>
+        <v-toolbar-title class="mr-auto">Dashbaord</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-text-field
           append-inner-icon="mdi-magnify"

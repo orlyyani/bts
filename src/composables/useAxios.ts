@@ -1,6 +1,7 @@
 import api from '@/composables/useApiMiddleware'
 import type { SupervisorAccount } from '@/types/SupervisorAccount'
 import type { BenchMember } from '@/types/BenchMember'
+import type { Login } from '@/types/Common'
 
 const request = async ({
   method,
@@ -22,6 +23,7 @@ const request = async ({
 
 const useAxios = {
   getData: () => request({ method: 'get', url: '/data' }),
+  login: (data: Login) => request({ method: 'post', url: '/account/login', data }),
   registerSupervisor: (data: SupervisorAccount) =>
     request({ method: 'post', url: '/supervisor', data }),
   registerBenchMember: (data: BenchMember) => request({ method: 'post', url: '/benchMember', data })

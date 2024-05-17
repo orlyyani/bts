@@ -46,7 +46,7 @@ const showBenchMemberForm = ref(false)
           </div>
         </template>
         <template v-slot:item.actions="{ item }">
-          <v-btn icon size="small" color="green">
+          <v-btn icon size="small" color="green" :to="`/supervisor/members/${item.id}`">
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
         </template>
