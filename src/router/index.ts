@@ -6,6 +6,7 @@ import SupervisorDashboard from '@/views/Supervisor/DashboardPage.vue'
 import MemberDetail from '@/views/Supervisor/Members/MemberDetailPage.vue'
 import OlpPage from '@/views/Supervisor/Members/Olp/OlpPage.vue'
 import Cookies from 'js-cookie'
+import { USER_ROLE } from '@/constants'
 
 const routes = [
   {
@@ -15,22 +16,38 @@ const routes = [
   },
   {
     path: '/',
-    name: 'Dashboard',
-    component: Dashboard
+    name: 'Root',
+    redirect: () => {
+      const userRole = Cookies.get('role')
+
+      switch (userRole) {
+        case USER_ROLE.ADMIN:
+          return '/admin/registration'
+        case USER_ROLE.SUPERVISOR:
+          return '/dashboard'
+        case USER_ROLE.BENCH_MEMBER:
+          return '/login'
+        default:
+          return '/login'
+      }
+    }
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: Dashboard
+    component: Dashboard,
+    meta: { roles: [USER_ROLE.SUPERVISOR] }
   },
   {
     path: '/admin/registration',
     name: 'AdminRegistration',
-    component: AdminRegistrationPage
+    component: AdminRegistrationPage,
+    meta: { roles: [USER_ROLE.ADMIN] }
   },
   {
     path: '/supervisor',
     name: 'Supervisor',
+    meta: { roles: [USER_ROLE.SUPERVISOR] },
     children: [
       {
         path: 'dashboard',
@@ -57,18 +74,21 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const publicPages = [
-    '/login',
-    '/admin/registration',
-    '/supervisor/dashboard',
-    '/supervisor/members/:id'
-  ]
+  const publicPages = ['/login']
   const authRequired = !publicPages.includes(to.path)
   const token = Cookies.get('token')
 
-  // if (authRequired && !token) {
-  //   return next('/login')
-  // }
+  if (authRequired && !token) {
+    return next('/login')
+  }
+
+  const userRole = Cookies.get('role')
+
+  // Check if the route requires a role
+  if (to.meta.roles && !to.meta.roles.includes(userRole)) {
+    // If the user's role is not allowed, redirect to the login page
+    return next('/login')
+  }
 
   next()
 })

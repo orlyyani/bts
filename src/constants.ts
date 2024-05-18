@@ -76,3 +76,9 @@ export const TABLE_DATA = [
     profileUpdated: false
   }
 ]
+
+export const USER_ROLE = {
+  ADMIN: 'admin',
+  BENCH_MEMBER: 'benchMember',
+  SUPERVISOR: 'supervisor'
+}
