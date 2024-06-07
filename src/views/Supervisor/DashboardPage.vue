@@ -1,36 +1,75 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import AppLayout from '@/layouts/AppLayout.vue'
-import { TABLE_COLUMNS, TABLE_DATA } from '@/constants'
+import BaseDialog from '@/components/base/BaseDialog.vue'
+import BenchMemberForm from '@/components/supervisor/BenchMemberForm.vue'
+import BaseSnackBar from '@/components/base/BaseSnackBar.vue'
+
+import { ref } from 'vue'
+import { TABLE_COLUMNS } from '@/constants'
+import { MEMBERS_MENU_ITEMS } from '@/constants'
+import { useErrorHandling } from '@/composables/useErrorHandling'
+import { useBenchMemberStore } from '@/stores/benchMember'
 
 const headers = ref(TABLE_COLUMNS)
-const items = ref(TABLE_DATA)
+const membersMenuItems = ref(MEMBERS_MENU_ITEMS)
+const showBenchMemberForm = ref(false)
+const benchMemberStore = useBenchMemberStore()
+
+const { snackbar, snackbarText, setError } = useErrorHandling()
+
+const fetchEmployees = async () => {
+  await benchMemberStore.fetchEmployees().catch(setError)
+}
+
+fetchEmployees()
 </script>
 
 <template>
   <AppLayout>
+    <template #menu>
+      <v-btn icon>
+        <v-icon>mdi-dots-vertical</v-icon>
+        <v-menu activator="parent">
+          <v-list>
+            <v-list-item v-for="(item, index) in membersMenuItems" :key="index" :value="index">
+              <v-list-item-title @click="showBenchMemberForm = true">{{
+                item.title
+              }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-btn>
+    </template>
     <main class="pa-5">
-      <v-data-table :headers="headers" :items="items" class="elevation-1 data-table">
-        <template v-slot:item.profilePicture="{ item }">
+      <v-data-table
+        :headers="headers"
+        :items="benchMemberStore.benchMembers"
+        disable-pagination
+        class="elevation-1 data-table"
+      >
+        <template v-slot:item.isProfileUpdate="{ item }">
           <div class="d-flex justify-center">
-            <v-checkbox v-model="item.profilePicture" disabled></v-checkbox>
+            <v-checkbox v-model="item.isProfileUpdate"></v-checkbox>
           </div>
         </template>
-        <template v-slot:item.rivs="{ item }">
+        <template v-slot:item.isRIVS="{ item }">
           <div class="d-flex justify-center">
-            <v-checkbox v-model="item.rivs" disabled></v-checkbox>
-          </div>
-        </template>
-        <template v-slot:item.profileUpdated="{ item }">
-          <div class="d-flex justify-center">
-            <v-checkbox v-model="item.profileUpdated" disabled></v-checkbox>
+            <v-checkbox v-model="item.isRIVS"></v-checkbox>
           </div>
         </template>
         <template v-slot:item.actions="{ item }">
-          <!-- Add actions here -->
+          <v-btn icon size="small" color="green" :to="`/supervisor/members/${item.id}`">
+            <v-icon>mdi-pencil</v-icon>
+          </v-btn>
         </template>
+        <template #bottom></template>
       </v-data-table>
     </main>
+    <BaseDialog v-model="showBenchMemberForm">
+      <BenchMemberForm @success="showBenchMemberForm = false" />
+    </BaseDialog>
+
+    <BaseSnackBar v-model="snackbar" :text="snackbarText" />
   </AppLayout>
 </template>
 

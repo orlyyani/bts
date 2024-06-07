@@ -1,4 +1,4 @@
-export interface SupervisorAccount {
+export interface BenchMember {
   employeeName: string
   employeePass: string
   isBenchMember: boolean
@@ -9,4 +9,5 @@ export interface SupervisorAccount {
   supervisorEmpID?: string
   dateCreated?: string
   isDeleted?: boolean
+  id?: number
 }
