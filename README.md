@@ -11,7 +11,7 @@ To run this project locally, follow these steps:
 1. Clone the repository to your local machine:
 
    ```
-   git clone https://orlyyanson@bitbucket.org/orlyyanson/bts-fe.git
+   git clone https://github.com/orlyyani/bts.git
    ```
 
 2. Navigate into the project directory:
