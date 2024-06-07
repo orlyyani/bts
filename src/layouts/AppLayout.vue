@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { MENU_ITEMS } from '@/constants'
+import { useUserRoleStore } from '@/stores/userRole'
 
+const userRoleStore = useUserRoleStore()
 const drawer = ref(true)
 const rail = ref(false)
 const activeMenu = ref()
@@ -13,7 +15,7 @@ const menuItems = ref(MENU_ITEMS)
     <v-navigation-drawer v-model="drawer" :rail="rail" permanent @click="rail = false">
       <v-list-item
         prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg"
-        title="John Leider"
+        :title="userRoleStore.employeeName"
         nav
       >
         <template v-slot:append>
@@ -38,7 +40,7 @@ const menuItems = ref(MENU_ITEMS)
 
     <v-main style="height: 250px">
       <v-app-bar app>
-        <v-toolbar-title class="mr-auto">Dashbaord</v-toolbar-title>
+        <v-toolbar-title class="mr-auto">Dashboard</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-text-field
           append-inner-icon="mdi-magnify"

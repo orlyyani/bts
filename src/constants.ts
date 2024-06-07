@@ -29,12 +29,12 @@ export const MENU_ITEMS = [
 export const MEMBERS_MENU_ITEMS = [{ title: 'Add Member' }]
 
 export const TABLE_COLUMNS = [
-  { title: 'Name', key: 'name', align: 'start', sortable: false },
-  { title: 'Team', key: 'team' },
-  { title: 'Status', key: 'status' },
-  { title: 'Profile Picture', key: 'profilePicture' },
-  { title: 'RIVS', key: 'rivs' },
-  { title: 'Profile Updated', key: 'profileUpdated' },
+  { title: 'Name', key: 'employeeName', align: 'start', sortable: false },
+  { title: 'Team', key: 'teamID' },
+  { title: 'Status', key: 'isActive' },
+  { title: 'Profile Picture', key: 'isProfileUpdate' },
+  { title: 'RIVS', key: 'isRIVS' },
+  { title: 'Profile Updated', key: 'isProfileUpdate' },
   { title: 'Actions', key: 'actions', sortable: false }
 ]
 

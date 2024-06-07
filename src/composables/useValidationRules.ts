@@ -1,7 +1,9 @@
 export function useValidationRules() {
   const requiredRule = (name: string) => (v: string) => !!v || `${name} is required`
-  const lessThanCharactersRule = (name: string) => (v: string) =>
-    (v && v.length <= 10) || `${name} must be less than 10 characters`
+  const lessThanCharactersRule =
+    (name: string, maxLength: number = 10) =>
+    (v: string) =>
+      (v && v.length <= maxLength) || `${name} must be less than ${maxLength} characters`
   const specialCharactersRule = (name: string) => (v: string) =>
     /[!@#$%^&*(),.?":{}|<>]/g.test(v) || `${name} must contain at least one special character`
   const alphanumericRule = (name: string) => (v: string) =>

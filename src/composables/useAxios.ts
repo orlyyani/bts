@@ -16,11 +16,13 @@ const request = async ({
 }
 
 const useAxios = {
-  getData: () => request({ method: 'get', url: '/data' }),
   login: (data: Login) => request({ method: 'post', url: '/account/login', data }),
   registerSupervisor: (data: SupervisorAccount) =>
-    request({ method: 'post', url: '/employee', data }),
-  registerBenchMember: (data: BenchMember) => request({ method: 'post', url: '/benchMember', data })
+    request({ method: 'post', url: '/account', data }),
+  registerBenchMember: (data: BenchMember) => request({ method: 'post', url: '/employee', data }),
+  getEmployees: () => request({ method: 'get', url: '/employee' }),
+  getEmployee: (id: string) => request({ method: 'get', url: `/employee/${id}` }),
+  getBench: () => request({ method: 'get', url: '/bench' })
 }
 
 export default useAxios

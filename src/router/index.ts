@@ -24,7 +24,7 @@ const routes = [
         case USER_ROLE.ADMIN:
           return '/admin/registration'
         case USER_ROLE.SUPERVISOR:
-          return '/dashboard'
+          return '/supervisor/dashboard'
         case USER_ROLE.BENCH_MEMBER:
           return '/login'
         default:

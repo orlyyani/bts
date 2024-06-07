@@ -1,20 +1,35 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import 'vue-datepicker-next/index.css'
 import DatePicker from 'vue-datepicker-next'
 import dayjs from 'dayjs'
-import 'vue-datepicker-next/index.css'
+import useAxios from '@/composables/useAxios'
+import BaseSnackBar from '@/components/base/BaseSnackBar.vue'
+
+import { ref, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useErrorHandling } from '@/composables/useErrorHandling'
+import type { BenchMember } from '@/types/BenchMember'
 
 const route = useRoute()
+const { getEmployee } = useAxios
+const { snackbar, snackbarText, setError } = useErrorHandling()
 
-const details = ref({
-  profilePicture: false,
-  rivs: false,
-  profileUpdate: false,
+const snackbarColor = ref('error')
+const details = ref<BenchMember>({
+  id: 0,
+  isRIVS: false,
+  isProfileUpdate: false,
   isActive: false,
-  startDate: null,
-  endDate: null
+  dateCreated: '',
+  endDate: ''
 })
+
+const fetchEmployeeDetails = async () => {
+  const response = await getEmployee(route.params.id).catch(setError)
+  console.log(response?.data?.employees?.[0])
+}
+
+fetchEmployeeDetails()
 
 const benchHistory = ref([])
 const olpTrackingList = ref([
@@ -45,12 +60,12 @@ watch(details, () => {
 const saveChanges = () => {
   if (details.value.isActive !== previousIsActive.value) {
     if (details.value.isActive) {
-      if (!details.value.startDate) {
+      if (!details.value.dateCreated) {
         alert('Please input the start date.')
       } else {
         previousIsActive.value = details.value.isActive
         benchHistory.value.push(
-          `Start date: ${dayjs(details.value.startDate).format('MMMM DD, YYYY')}`
+          `Start date: ${dayjs(details.value.dateCreated).format('MMMM DD, YYYY')}`
         )
         // Save the changes
       }
@@ -67,11 +82,11 @@ const saveChanges = () => {
 }
 
 const formattedStartDate = computed(() => {
-  return details.value.startDate ? dayjs(details.value.startDate).format('MMMM DD, YYYY') : ''
+  return details.value.dateCreated ? dayjs(details.value.dateCreated).format('MMMM DD, YYYY') : ''
 })
 
 const formattedEndDate = computed(() => {
-  return details.value.endDate ? dayjs(details.value.endDate).format('MMMM DD, YYYY') : ''
+  return details.value.dateCreated ? dayjs(details.value.dateCreated).format('MMMM DD, YYYY') : ''
 })
 </script>
 
@@ -79,9 +94,9 @@ const formattedEndDate = computed(() => {
   <v-sheet>
     <h2>Placement Checklist and Profile</h2>
     <v-card class="pa-3 mt-3" variant="outlined">
-      <v-checkbox label="Profile Picture" v-model="details.profilePicture" hide-details="auto" />
-      <v-checkbox label="RIVS" v-model="details.rivs" hide-details="auto" />
-      <v-checkbox label="Profile Update" v-model="details.profileUpdate" hide-details="auto" />
+      <v-checkbox label="Profile Picture" v-model="details.isProfileUpdate" hide-details="auto" />
+      <v-checkbox label="RIVS" v-model="details.isRIVS" hide-details="auto" />
+      <v-checkbox label="Profile Update" v-model="details.isProfileUpdate" hide-details="auto" />
       <v-switch
         label="Is Active"
         v-model="details.isActive"
@@ -89,7 +104,7 @@ const formattedEndDate = computed(() => {
         color="primary"
         inset
       />
-      <date-picker v-model:value="details.startDate" v-if="details.isActive">
+      <date-picker v-model:value="details.dateCreated" v-if="details.isActive">
         <template #input>
           <v-text-field
             v-model="formattedStartDate"
@@ -139,6 +154,7 @@ const formattedEndDate = computed(() => {
         </v-list-item>
       </v-list-item-group>
     </v-card>
+    <BaseSnackBar :color="snackbarColor" v-model="snackbar" :text="snackbarText" />
   </v-sheet>
 </template>
 

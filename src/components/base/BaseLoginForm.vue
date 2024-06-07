@@ -35,6 +35,7 @@ const login = async () => {
   if (response) {
     Cookies.set('token', response.data.token)
     await userRoleStore.setAccount(response.data.account)
+    userRoleStore.employeeName = response.data.account.employeeName
     Cookies.set('role', userRoleStore.role)
     router.push('/')
   }
@@ -42,7 +43,8 @@ const login = async () => {
 </script>
 
 <template>
-  <v-sheet class="mx-auto h-100 d-flex align-center" width="300">
+  <v-sheet class="mx-auto h-100 d-flex flex-column justify-center align-center" width="300">
+    <h2>Login</h2>
     <v-form fast-fail @submit.prevent="login" class="w-100 pa-3">
       <v-text-field
         v-model="form.username"

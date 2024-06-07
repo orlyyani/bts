@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import Login from '@/components/base/BaseLoginForm.vue'
+import AppBannerLayout from '@/layouts/AppBannerLayout.vue'
 </script>
 
 <template>
-  <v-app class="h-100">
-    <Login />
-  </v-app>
+  <AppBannerLayout>
+    <v-app>
+      <Login />
+    </v-app>
+  </AppBannerLayout>
 </template>
-
-<style></style>

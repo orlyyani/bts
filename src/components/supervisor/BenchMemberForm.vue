@@ -1,17 +1,21 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import BaseSnackBar from '@/components/base/BaseSnackBar.vue'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 
 import { ref } from 'vue'
 import type { Ref } from 'vue'
-import { useSupervisorStore } from '@/stores/supervisor'
+import { reactive } from 'vue'
+import { useBenchMemberStore } from '@/stores/benchMember'
 import { useRegister } from '@/composables/useRegister'
 import { useValidationRules } from '@/composables/useValidationRules'
 import { useErrorHandling } from '@/composables/useErrorHandling'
+import { vMaska } from 'maska'
 import { storeToRefs } from 'pinia'
 
-const supervisorStore = useSupervisorStore()
-const { account } = storeToRefs(supervisorStore)
-const { register } = useRegister()
+const benchMemberStore = useBenchMemberStore()
+const { registerBench } = useRegister()
 const {
   requiredRule,
   specialCharactersRule,
@@ -21,9 +25,12 @@ const {
 } = useValidationRules()
 const { formErrors, snackbar, snackbarText, setError, clearError } = useErrorHandling()
 
+const { account: member, members } = storeToRefs(benchMemberStore)
 const form: Ref<HTMLFormElement | null> = ref(null)
 const loading = ref(false)
 const snackbarColor = ref('error')
+
+const emits = defineEmits(['success'])
 
 const employeeIdRules = [
   requiredRule('Employee ID'),
@@ -36,8 +43,9 @@ const tempPasswordRules = [
   specialCharactersRule('Temporary Password'),
   alphanumericRule('Temporary Password')
 ]
+const startDateRules = [requiredRule('Start Date')]
 
-const registerSupervisor = async () => {
+const registerBenchMember = async () => {
   clearError()
 
   const res = await form.value?.validate()
@@ -46,52 +54,64 @@ const registerSupervisor = async () => {
   }
 
   loading.value = true
-  account.value.isBenchMember = false
-  const response = await register(account.value).catch(setError)
+  member.value.isBenchMember = true
+  member.value.dateCreated = dayjs(member.value.dateCreated).utc().format()
+  const response = await registerBench(member.value).catch(setError)
   loading.value = false
 
   if (response) {
-    supervisorStore.resetAccount()
+    benchMemberStore.resetAccount()
     form.value?.reset()
-    snackbarText.value = 'Supervisor registered successfully'
+    snackbarText.value = 'Bench member registered successfully'
     snackbarColor.value = 'success'
     snackbar.value = true
+    members.value.push(response.data)
+    emits('success')
   }
 }
+
+const options = reactive({
+  mask: '##/##/####',
+  eager: true
+})
 </script>
 
 <template>
-  <v-sheet class="mx-auto h-100 d-flex flex-column align-center justify-center" width="300">
-    <h2 class="text-center">Supervisor Registration</h2>
-    <v-form ref="form" fast-fail @submit.prevent="registerSupervisor" class="w-100 pa-3">
+  <v-sheet class="mx-auto d-flex align-center" width="300">
+    <v-form ref="form" fast-fail @submit.prevent="registerBenchMember" class="w-100 pa-3">
       <v-text-field
-        v-model="account.supervisorEmpID"
+        v-model="member.supervisorEmpID"
         :rules="employeeIdRules"
         label="Employee ID"
         required
         :error-messages="formErrors.supervisorempid"
       ></v-text-field>
-
       <v-text-field
-        v-model="account.employeeName"
+        v-model="member.employeeName"
         :rules="nameRules"
         label="Name"
         required
         :error-messages="formErrors.employeename"
       ></v-text-field>
-
       <v-text-field
-        v-model="account.employeePass"
+        v-model="member.employeePass"
         :rules="tempPasswordRules"
         label="Temporary Password"
         :error-messages="formErrors.employeepass"
         type="password"
         required
       ></v-text-field>
+      <v-text-field
+        v-model="member.dateCreated"
+        :rules="startDateRules"
+        label="Start Date"
+        placeholder="MM/DD/YYYY"
+        v-maska:[options]
+        required
+      ></v-text-field>
 
       <v-btn class="mt-2" type="submit" block :loading="loading">Register</v-btn>
     </v-form>
-
     <BaseSnackBar :color="snackbarColor" v-model="snackbar" :text="snackbarText" />
   </v-sheet>
 </template>

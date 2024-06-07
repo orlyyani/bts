@@ -1,18 +1,31 @@
 import { defineStore } from 'pinia'
-import type { SupervisorAccount } from '@/types/SupervisorAccount'
 
 export const useSupervisorStore = defineStore({
   id: 'supervisor',
   state: () => ({
     account: {
-      employeeId: '',
-      name: '',
-      tempPassword: ''
+      supervisorEmpID: '',
+      employeeName: '',
+      employeePass: '',
+      isBenchMember: false,
+      teamID: '123',
+      isRIVS: false,
+      isProfileUpdate: false,
+      isActive: true
     }
   }),
   actions: {
-    updateAccount(account: SupervisorAccount) {
-      this.account = account
+    resetAccount() {
+      this.account = {
+        supervisorEmpID: '',
+        employeeName: '',
+        employeePass: '',
+        isBenchMember: false,
+        teamID: '123',
+        isRIVS: false,
+        isProfileUpdate: false,
+        isActive: true
+      }
     }
   }
 })

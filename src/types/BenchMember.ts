@@ -1,6 +1,13 @@
 export interface BenchMember {
-  id: number
-  name: string
-  tempPassword: string
-  startDate: string
+  employeeName: string
+  employeePass: string
+  isBenchMember: boolean
+  teamID?: string
+  isRIVS?: boolean
+  isProfileUpdate?: boolean
+  isActive?: boolean
+  supervisorEmpID?: string
+  dateCreated?: string
+  isDeleted?: boolean
+  id?: number
 }
